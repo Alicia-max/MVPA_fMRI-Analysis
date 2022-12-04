@@ -12,9 +12,9 @@ from sklearn.decomposition import PCA
 
 
 # for 5-fold 9-subject CV (Alex's suggestion)
-def make_chunks_per_9subjects(subject):
+def make_chunks_per_7subjects(subject):
     chunks = np.ravel([[i]*30 for i in range(subject)])
-    chunks = chunks % 5
+    chunks = chunks % 7
     return chunks
 
 
