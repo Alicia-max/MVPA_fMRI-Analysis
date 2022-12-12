@@ -70,32 +70,28 @@ def test_baseline(X_train, X_test, y_train, y_test, clf_dic):
 
 
 def tuned_run(pipeline, grid,chunks, train_samples, train_labels, type_, dic, name_clf) :
+   
+    warnings.simplefilter("ignore")
+    print('\n'+ name_clf + ', 5fold CV : \n')
+    grid_result = GridSearchCV(pipeline, param_grid = grid, scoring = 'accuracy', verbose=1, n_jobs=1, cv = 5)
+    grid_result.fit(train_samples, train_labels)
     
-    if not sys.warnoptions : 
-        warnings.simplefilter("ignore")
-        os.environ["PYTHONWARGNINGS"]=('ignore::ConvergenceWarning')
-        print('\n'+ name_clf + ', 5fold CV : \n')
-        
-        grid_result = GridSearchCV(pipeline, param_grid = grid, scoring = 'accuracy', verbose=1, n_jobs=1, cv = 5)
-        grid_result.fit(train_samples, train_labels)
-        
+    print('Mean test score :' , grid_result.cv_results_['mean_test_score'], '\n')
+    print('Test score std  :', grid_result.cv_results_['std_test_score'], '\n')
+    print('Best Score: ', grid_result.best_score_) 
+    print('Best Params: ', grid_result.best_params_) 
+    dic[name_clf+'_5FCV_'+type_]=grid_result.best_score_
+    
+    for key, chunk in chunks.items():
+        print('\n'+name_clf+ ' , ' +  key +' : \n')
+        grid_result = GridSearchCV(pipeline, param_grid = grid, scoring = 'accuracy', verbose=1, n_jobs=1, 
+                                   cv =LeaveOneGroupOut())
+        grid_result.fit(train_samples, train_labels ,groups = chunk)
         print('Mean test score :' , grid_result.cv_results_['mean_test_score'], '\n')
         print('Test score std  :', grid_result.cv_results_['std_test_score'], '\n')
+        dic[name_clf+'_'+key+type_]= grid_result.best_score_
         print('Best Score: ', grid_result.best_score_) 
         print('Best Params: ', grid_result.best_params_) 
-        dic[name_clf+'_5FCV_'+type_]=grid_result.best_score_
-        
-        for key, chunk in chunks.items():
-            print('\n'+name_clf+ ' , ' +  key +' : \n')
-            grid_result = GridSearchCV(pipeline, param_grid = grid, scoring = 'accuracy', verbose=1, n_jobs=-1, 
-                                   cv =LeaveOneGroupOut())
-            grid_result.fit(train_samples, train_labels ,groups = chunk)
-            print('Mean test score :' , grid_result.cv_results_['mean_test_score'], '\n')
-            print('Test score std  :', grid_result.cv_results_['std_test_score'], '\n')
-            
-            dic[name_clf+'_'+key+type_]= grid_result.best_score_
-            print('Best Score: ', grid_result.best_score_) #Mean cross-validated score of the best_estimator
-            print('Best Params: ', grid_result.best_params_) 
         
         
 def evaluation_test (pipeline, X, y, cv_, groups=None):
