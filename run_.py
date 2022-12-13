@@ -152,7 +152,7 @@ def evaluation_test (pipeline, X, y, cv_, groups=None):
                                           y=y,
                                           groups=groups,
                                           cv=cv_, 
-                                          n_permutations=10,
+                                          n_permutations=30,
                                           n_jobs=1,
                                           verbose=1)
     print('Prediction accuracy : %0.2f'% null_cv_scores[0], '\n',
