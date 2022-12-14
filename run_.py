@@ -73,9 +73,11 @@ def baseline_run(classifiers, chunks, train_samples, train_labels, dic) :
                 
 def test_baseline(X_train, X_test, y_train, y_test, clf_dic):
     warnings.simplefilter("ignore")
+
     for name, clf in clf_dic.items():
-        std_samples_train =StandardScaler().fit_transform(X_train)
-        std_sample_test=StandardScaler().fit_transform(X_test)
+        scaler = StandardScaler()
+        std_samples_train =scaler.fit_transform(X_train)
+        std_sample_test=scaler.transform(X_test)
         clf.fit(std_samples_train, y_train)
         y_pred= clf.predict(std_sample_test)
         acc=accuracy_score(y_test, y_pred)
@@ -114,7 +116,7 @@ def tuned_run(pipeline, grid,chunks, train_samples, train_labels, type_, dic, na
 
     # GridSearch initialisation
     grid_result = GridSearchCV(pipeline, param_grid = grid, scoring = 'accuracy',
-                               verbose=1, n_jobs=1, cv = 5)
+                               verbose=1, n_jobs=-1, cv = 5)
     # Fit
     grid_result.fit(train_samples, train_labels)
     
@@ -131,7 +133,7 @@ def tuned_run(pipeline, grid,chunks, train_samples, train_labels, type_, dic, na
         
         # GridSearch initialisation
         grid_result = GridSearchCV(pipeline, param_grid = grid, scoring = 'accuracy', 
-                                   verbose=1, n_jobs=1, cv =LeaveOneGroupOut())
+                                   verbose=1, n_jobs=-1, cv =LeaveOneGroupOut())
         
         # Fit
         grid_result.fit(train_samples, train_labels ,groups = chunk)
@@ -153,7 +155,7 @@ def evaluation_test (pipeline, X, y, cv_, groups=None):
                                           groups=groups,
                                           cv=cv_, 
                                           n_permutations=30,
-                                          n_jobs=1,
+                                          n_jobs=-1,
                                           verbose=1)
     print('Prediction accuracy : %0.2f'% null_cv_scores[0], '\n',
               'p-value: %0.04f'%(null_cv_scores[2]))
