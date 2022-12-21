@@ -12,6 +12,9 @@ from analysis_spacenet import analysis_spacenet
 import random
 
 def parse_baseline(config):
+    ''''
+    Function to parse parameters for the baseline simulation
+    '''
     ## Parse parameters that are common to all models
     cv_strategy = config.get('general', 'cv_strategy')
     datadir = config.get('general', 'datadir')
@@ -62,6 +65,9 @@ def parse_baseline(config):
     }
 
 def parse_decoder(config):
+    ''''
+    Function to parse parameters for the decoder simulation
+    '''
     ## Parse parameters that are common to all models
     cv_strategy = config.get('general', 'cv_strategy')
     datadir = config.get('general', 'datadir')
@@ -85,6 +91,9 @@ def parse_decoder(config):
     }
 
 def parse_spacenet(config):
+    ''''
+    Function to parse parameters for the spacenent simulation
+    '''
     ## Parse parameters that are common to all models
     cv_strategy = config.get('general', 'cv_strategy')
     datadir = config.get('general', 'datadir')
@@ -110,6 +119,10 @@ def parse_spacenet(config):
 
 
 def configure_logging(logdir, config):
+    '''
+    Function to configure the logging of the simulation
+    Opens a directory where the logs and simulation-specific models are saved
+    '''
     os.makedirs(logdir, exist_ok=True)
 
     f = os.path.join(logdir, 'config.ini')
@@ -125,10 +138,12 @@ def configure_logging(logdir, config):
     logging.info('Setting up the simulation')
 
 if __name__ == "__main__":
+    # Reproducability
     random.seed(42)
-    
+    # Configuration of parsing
+
     parser = ArgumentParser()
-    parser.add_argument('--config', type=str, default='configs/baseline.ini')
+    parser.add_argument('--config', type=str, default='configs/baseline_per_run.ini')
     args = parser.parse_args()
     config = ConfigParser()
     config.read(args.config)

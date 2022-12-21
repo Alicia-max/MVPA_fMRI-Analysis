@@ -2,7 +2,7 @@
 from nilearn.decoding import Decoder
 from sklearn.model_selection import LeaveOneGroupOut
 
-from fonction import make_chunks_per_run, make_chunks_per_subjects
+from helpers import make_chunks_per_run, make_chunks_per_subjects
 
 from dataset import Dataset
 import pickle
@@ -15,7 +15,22 @@ import logging
 
 def generate_decoder(datadir, cv_strategy, decoder, param_decoder, saving_dir, debug=False):
     '''
-    TODO
+    !!! This function is different than the baseline
+    It traines only ONE model and its associated parameters!!!
+
+    Function to train a decoder using a set of parameters and log the results in the logging file specified in run.py
+    The dataset is first loaded in debug specified mode.
+    Then the CV strategy is specified !!! random not supported !!!
+    To finally train the decoder using param_decoder as a set of parameters,
+    using the CV with internal functions
+
+    Inputs:
+        datadir: string being the relative path of where the data is stored
+        cv_strategy: string to specify the cv_strategy
+        decoder: string to specify the decoder to use
+        param_decoder: dict of the associated parameters for the decoder
+        saving_dir: string being the relative path where the trained decoder is saved
+        debug: bool to specify debug mode
     '''
 
     ## Loading data
@@ -29,7 +44,6 @@ def generate_decoder(datadir, cv_strategy, decoder, param_decoder, saving_dir, d
     elif cv_strategy == 'per_subs':
         cv = LeaveOneGroupOut()
         chunks = make_chunks_per_subjects(dataset.nb_subs_)
-        print(chunks)
     else:
         logging.info('ERROR, {} cv not implemented for this method'.format(cv_strategy))
         sys.exit(-1)

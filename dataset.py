@@ -8,12 +8,39 @@ import os
 from nilearn.image import clean_img
 
 class Dataset():
-    """
-    TODO
-    """
+    '''
+    Class dataset to store the data during a simulation
+
+    Variables
+    ---------
+    beta_maps (nib.Nift1Image): Images used as inputs of the models
+    mask (nib.Nifti1Image): Mask associated to the images
+    labels (list): associated labels
+    nb_subs_ (int): number of subjects in the dataset
+    nb_runs_per_subs (int): number of runs per subject
+
+
+    Methods
+    -------
+    split_train_val(self, train_idx, validation_idx):
+        returns train and validation data specified by the input indices.
+        Useful for spacenet
+    get_beta_maps(self):
+        returns the beta_maps
+    def get_samples(self):
+        returns the samples, i.e. the flattened and masked beta_maps
+    def get_labels(self):
+        returns the labels
+    
+    '''
     def __init__(self, directory, debug=False):
         '''
-        TODO
+        Initialization of an instance of the class
+        If debug==True only 5 subjects are kept
+
+        Inputs:
+            directory: string specifying where the data is stored
+            debug: bool to specify debug mode
         '''
         beta_maps_dir = os.path.join(directory, 'beta_maps/')
         mask_dir = os.path.join(directory, 'anatomy/')
@@ -39,7 +66,12 @@ class Dataset():
     
     def split_train_val(self, train_idx, validation_idx):
         '''
-        TODO
+        Returns train and validation data specified by the input indices.
+        Useful for spacenet
+        
+        Inputs:
+            train_idx: list of idx to be put in the train fold
+            validation_idx: list of idx to be put in the validation fold
         '''
         raw_data, affine = self.beta_maps.get_fdata(), self.beta_maps.affine
         train_raw_data, val_raw_data = raw_data[..., train_idx], raw_data[..., validation_idx]
