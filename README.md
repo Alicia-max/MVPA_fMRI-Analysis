@@ -36,6 +36,11 @@ The goal is to classify fMRI brain images of subjects playing a video game that 
 
 `visualization.ipynb` contains plotter functions to visualize the results.
 
+## Libraries
+[numpy](https://numpy.org/)\
+[sklearn](https://scikit-learn.org/stable/)\
+[nilearn](https://nilearn.github.io/stable/index.html)\
+[nibabel](https://nipy.org/nibabel/)
 ## How to use
 Example config files are available in the `configs/` directory.\
 Simply run the following (as an example):
@@ -44,7 +49,7 @@ python run.py --config configs/baseline_per_run.ini
 ```
 ## Team Members
 
-This project belongs to the team of `ASA_GANG` with members:
+This project belongs to the team `ASA_GANG` with members:
 
 - Alicia Milloz: [@Alicia-max](https://github.com/Alicia-max)
 - Sevda Öğüt: [@ogutsevda](https://github.com/ogutsevda)
