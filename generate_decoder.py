@@ -1,17 +1,14 @@
+import pickle
+import os
+import sys
+import logging
 
 from nilearn.decoding import Decoder
 from sklearn.model_selection import LeaveOneGroupOut
 
-from helpers import make_chunks_per_run, make_chunks_per_subjects
-
 from dataset import Dataset
-import pickle
-import os
-import sys
 
-from nilearn.decoding import Decoder
-
-import logging
+from helpers import make_chunks_per_run, make_chunks_per_subjects
 
 def generate_decoder(datadir, cv_strategy, decoder, param_decoder, saving_dir, debug=False):
     '''
