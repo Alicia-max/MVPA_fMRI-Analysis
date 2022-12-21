@@ -32,7 +32,6 @@ def generate_decoder(datadir, cv_strategy, decoder, param_decoder, saving_dir, d
 
     ## Loading data
     dataset = Dataset(datadir, debug)
-    print(dataset.beta_maps)
 
     ## Setting up CV strategy
     if cv_strategy == 'per_run':
