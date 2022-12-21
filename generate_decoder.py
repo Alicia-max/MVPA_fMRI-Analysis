@@ -10,10 +10,10 @@ from dataset import Dataset
 
 from helpers import make_chunks_per_run, make_chunks_per_subjects
 
-def generate_decoder(datadir, cv_strategy, decoder, param_decoder, saving_dir, debug=False):
+def generate_decoder(datadir, cv_strategy, decoders, params_decoders, saving_dir, debug=False):
     '''
     !!! This function is different than the baseline
-    It traines only ONE model and its associated parameters!!!
+    It traines only ONE set of parameters per decoder!!!
 
     Function to train a decoder using a set of parameters and log the results in the logging file specified in run.py
     The dataset is first loaded in debug specified mode.
@@ -43,25 +43,27 @@ def generate_decoder(datadir, cv_strategy, decoder, param_decoder, saving_dir, d
     else:
         logging.info('ERROR, {} cv not implemented for this method'.format(cv_strategy))
         sys.exit(-1)
-
-    logging.info('Starting to fit decoder...')
-    decoder = Decoder(
-        estimator=decoder,
-        mask=dataset.mask,
-        cv=cv,
-        param_grid=param_decoder,
-        n_jobs=-1,
-        verbose=1,
-        standardize=True
-    )
-
-    decoder.fit(dataset.get_beta_maps(), dataset.get_labels(), groups = chunks)
     
-    ## Here save the decoder in saving_dir
-    logging.info('\n------------------------')
-    logging.info('Decoder fitted with scores')
-    logging.info(decoder.cv_scores_)
-    logging.info('------------------------')
+    for decoderstr, param_decoder in zip(decoders, params_decoders):
+        logging.info('Starting to fit {} decoder...'.format(decoderstr))
+        decoder = Decoder(
+            estimator=decoderstr,
+            mask=dataset.mask,
+            cv=cv,
+            param_grid=param_decoder,
+            n_jobs=-1,
+            verbose=1,
+            standardize=True
+        )
 
-    pickle.dump(decoder, open(os.path.join(saving_dir, 'train_decoder.sav'), 'wb'))
-    logging.info('Fitted decoder saved')
+        decoder.fit(dataset.get_beta_maps(), dataset.get_labels(), groups = chunks)
+        
+        ## Here save the decoder in saving_dir
+        logging.info('\n------------------------')
+        logging.info('Decoder fitted with scores')
+        logging.info(decoder.cv_scores_)
+        logging.info('------------------------')
+        
+        name = 'train_decoder_{}.sav'.format(decoderstr)
+        pickle.dump(decoder, open(os.path.join(saving_dir, name), 'wb'))
+        logging.info('Fitted decoder saved')

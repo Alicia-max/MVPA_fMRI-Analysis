@@ -38,8 +38,7 @@ def parse_baseline(config):
         logging.info('Parsing parameters for Ridge Classification')
         models.append('ridge')
 
-        params_ridge = {}
-        
+        params_ridge = {} 
         for str_ in ['max_iter', 'alpha', 'solver']:
             params_ridge[str_] = eval(config.get('ridge', str_))
         params_models.append(params_ridge)
@@ -50,7 +49,6 @@ def parse_baseline(config):
         models.append('linearsvc')
 
         params_linearsvc = {}
-
         for str_ in ['penalty', 'max_iter', 'loss', 'C', 'multi_class']:
             params_linearsvc[str_] = eval(config.get('linearsvc', str_))
         params_models.append(params_linearsvc)
@@ -72,22 +70,38 @@ def parse_decoder(config):
     cv_strategy = config.get('general', 'cv_strategy')
     datadir = config.get('general', 'datadir')
     debug = config.getboolean('setup', 'debug')
+
+    decoders, params_decoder = [], []
     if debug:
         logging.info('\nDEBUG SESSION')
 
-    if 'model' in config.sections():
-        logging.info('Parsing parameters for Decoder')
-        decoder = config.get('model', 'estimator')
-        param_decoder = {}
+    if 'logistic' in config.sections():
+        logging.info('Parsing parameters for the Logistic decoder')
+        decoders.append('logistic')
+
+        params_logistic = {}
         for str_ in ['penalty', 'max_iter', 'C', 'multi_class', 'solver']:
-            param_decoder[str_] = eval(config.get('model', str_))
+            params_logistic[str_] = eval(config.get('logistic', str_))
+        
+        params_decoder.append(params_logistic)
+
+    
+    if 'linearsvc' in config.sections():
+        logging.info('Parsing parameters for the L-SVC decoder')
+        decoders.append('svc') # Notice the difference with the above func
+
+        params_linearsvc = {}
+        for str_ in ['penalty', 'max_iter', 'loss', 'C', 'multi_class']:
+            params_linearsvc[str_] = eval(config.get('linearsvc', str_))
+        params_decoder.append(params_linearsvc)
+
 
     return {
         'cv_strategy': cv_strategy,
         'datadir': datadir,
         'debug': debug,
-        'decoder': decoder,
-        'param_decoder': param_decoder
+        'decoders': decoders,
+        'params_decoders': params_decoder
     }
 
 def parse_spacenet(config):

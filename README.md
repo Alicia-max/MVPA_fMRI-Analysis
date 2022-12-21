@@ -28,7 +28,7 @@ The goal is to classify fMRI brain images of subjects playing a video game that 
 
 `dataset.py` contains class to wrap the dataset that data-specific helpers as methods.
 
-`generate_decoder.py` contains a function that trains a [Decoder](https://nilearn.github.io/dev/modules/generated/nilearn.decoding.Decoder.html), logs the results and saves it in a specific directory. Note that the implementation allows the generation of only ONE decoder.
+`generate_decoder.py` contains a function that trains two [Decoder](https://nilearn.github.io/dev/modules/generated/nilearn.decoding.Decoder.html) (Linear SVC and Logistic Classifier), logs the results and saves them in a specific directory. Note that the implementation allows the training with only ONE set of parameters per decoder.
 
 `helpers.py` contains helper functions for the cross validation of the models.
 
