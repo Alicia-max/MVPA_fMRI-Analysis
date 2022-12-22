@@ -1,4 +1,4 @@
-# Decoding brain states triggered via video games using fMRI based MVPA approaches
+# Decoding Brain States Triggered via Video Game with fMRI Based MVPA Approach
 ## Summary
 
 This repository contains the code and the report for the second project of CS-433 Machine Learning 2022 course at EPFL. This project was conducted under the supervision of members of the [MIP:lab](https://miplab.epfl.ch/).\
